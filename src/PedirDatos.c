@@ -168,42 +168,40 @@ int getFinalFloat(char arrayPosiblesNumeros[], float *floatFinal) {
 
 	/*	Pregunta Ingreso al usuario y completa la opcion ingresada en pNumeroIngresado (int) */
 //TODO: OK 14-may ANDA
-	int getPedirInt(char mensaje[], int reintentos, int minimo, int maximo,
-			char mensajeError[], int *pNumeroIngresado) {
-		fflush(stdin);
-		int retorno = 0;
-		int ingresoOk = -1;
-		int nroIngresadoInt;
-		char ingreso[LEN_OPCION];
+int getPedirInt(char mensaje[], int reintentos, int minimo, int maximo,char mensajeError[], int *pNumeroIngresado) {
 
-		if (mensaje != NULL
-				&& reintentos
-						> 0&& minimo < maximo && mensajeError != NULL && pNumeroIngresado != NULL) {
-			printf("%s", mensaje);
+	int retorno = 0;
+	int ingresoOk = -1;
+	int nroIngresadoInt;
+	char ingreso[LEN_OPCION];
 
-			do {
-				fgets(ingreso, LEN_OPCION, stdin);
-				if (esNumeroEntero(ingreso) == 0) {
-					nroIngresadoInt = (int) strtol(ingreso, NULL, 10);
-					if ((nroIngresadoInt > maximo || nroIngresadoInt < minimo)) {
-						printf("%s", mensajeError);
-						fflush(stdin);
-						reintentos--;
-					} else {
-						reintentos = 0;
-//					pNumeroIngresado = &nroIngresadoInt;
-						*pNumeroIngresado = nroIngresadoInt;
-						retorno = 1;
-					}
-				} else {
-					reintentos--;
+	if (mensaje != NULL && reintentos > 0&& minimo < maximo && mensajeError != NULL && pNumeroIngresado != NULL) {
+		printf("%s", mensaje);
+
+		do {
+			fgets(ingreso, LEN_OPCION, stdin);
+			if (esNumeroEntero(ingreso) == 0) {
+				nroIngresadoInt = (int) strtol(ingreso, NULL, 10);
+				if ((nroIngresadoInt > maximo || nroIngresadoInt < minimo)) {
 					printf("%s", mensajeError);
+					fflush(stdin);
+					reintentos--;
+				} else {
+					reintentos = 0;
+//					pNumeroIngresado = &nroIngresadoInt;
+					*pNumeroIngresado = nroIngresadoInt;
+					retorno = 1;
 				}
-			} while (reintentos > 0);
-		}
-
-		return retorno;
+			} else {
+				reintentos--;
+				printf("%s", mensajeError);
+			}
+			fflush(stdin);
+		} while (reintentos > 0);
 	}
+
+	return retorno;
+}
 
 	/*	Pregunta Ingreso al usuario y completa la opcion ingresada en pNumeroIngresado (int)
 	 *

@@ -19,6 +19,7 @@
 #define LEN_LNAME 51
 #define LEN_FLYCODE 15
 #define LEN_PRICE 15
+#define LEN_ID_PSJ 15
 
 #define PSJ_TYPE_A 3	//PASAJERO VIP
 #define PSJ_TYPE_B 2	//PASAJERO BUSINESS
@@ -83,6 +84,8 @@ void printPsgById(Passenger list[], int length, int id);
 int Passenger_BuscarLibre(Passenger passengerList[],int tam);
 
 int Passenger_Alta(Passenger passengerList[], int tam);
+int Passenger_Baja(Passenger passengerList[], int tam);
+int Passenger_Modificacion(Passenger passengerList[], int tam);
 void printPsgByStatus(Passenger list[], int length, int libre);
 int estaVacio(Passenger* list, int len);
 

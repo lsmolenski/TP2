@@ -113,49 +113,7 @@ void printPassengerU(Passenger pasajero){
 
 }
 
-// devuelve -1
-//devuelve 0 si esta llena la lista y no pudo ser insertado el pasajero
-//devuelve 1 si pudo darlo de alta e insertar en la lista de pasajeros
-int Passenger_Alta(Passenger passengerList[], int tam){
-	int indexLibre = -1;
-	int rtn;
-	int idPsj;
 
-	char namePsj[LEN_NAME];
-	char lNamePsj[LEN_LNAME];
-	char flyCode[LEN_LNAME];
-	float price;
-
-	fflush(stdin);
-	if (passengerList != NULL && tam > 0 ){
-		indexLibre = Passenger_BuscarLibre(passengerList, tam);
-
-		//hay lugar para meter en la Lista
-		if (indexLibre > -1){
-			idPsj = Passenger_ObtenerIdUnico();
-
-			int pideNameOK = getPedirStringSoloLetras("Ingrese nombre(s) pasajero: ", 5, "Ingreso inválido, reintente", namePsj, LEN_LNAME);
-			int pideApelOK = getPedirStringSoloLetras("Ingrese apellido(s) pasajero: ", 5, "Ingreso inválido, reintente", lNamePsj, LEN_LNAME);
-
-			getPedirString("Ingrese codigo de vuelo: ", 5, "Ingreso inválido, reintente", flyCode, LEN_FLYCODE);
-
-			int pidePriceOK = getFloatFromS("Ingrese precio de vuelo: $", 5, "Ingreso invalido, reintente: ",&price, LEN_PRICE);
-			int tipoPasajero;
-			int pideTipoPsj = getPedirInt("Ingrese tipo pasajero \n\t3: VIP | 2: BUSINESS | 1: LOW COST | 0: TRIPULACION\n",
-							5, 0, 3, "Opcion Invalida, ingrese nuevamente: \n", &tipoPasajero);
-
-
-			int psjAddOk = addPassenger( passengerList, tam, idPsj, namePsj, lNamePsj, price, tipoPasajero, flyCode);
-		}else{
-			//no hay lugar en el vector para meter mas pasajeros
-			rtn = 0;
-			printf("\n Error \n");
-		}
-
-//		}
-	}
-	return 0;
-}
 
 
 
@@ -505,7 +463,7 @@ void calcularPromediosPasajeros(Passenger listPassenger[],int len){
 		printf("\nTotal precio vuelos $%.2f\n",totalVentas);
 		printf("Promedio precio de vuelos: $%.2f\n",precioPromedio);
 		for (int i = 0; i < len; i++) {
-			if (listPassenger[i].isEmpty == OCUPADO && listPassenger[i].price > precioPromedio) {
+			if (listPassenger[i].isEmpty == OCUPADO && listPassenger[i].price >= precioPromedio) {
 				cantidadPorEncimaDelPromedio++;
 
 			}
@@ -516,4 +474,112 @@ void calcularPromediosPasajeros(Passenger listPassenger[],int len){
 	}
 
 }
+
+// devuelve -1
+//devuelve 0 si esta llena la lista y no pudo ser insertado el pasajero
+//devuelve 1 si pudo darlo de alta e insertar en la lista de pasajeros
+int Passenger_Alta(Passenger passengerList[], int tam){
+	int indexLibre = -1;
+	int rtn;
+	int idPsj;
+
+	char namePsj[LEN_NAME];
+	char lNamePsj[LEN_LNAME];
+	char flyCode[LEN_LNAME];
+	float price;
+
+	fflush(stdin);
+	if (passengerList != NULL && tam > 0 ){
+		indexLibre = Passenger_BuscarLibre(passengerList, tam);
+
+		//hay lugar para meter en la Lista
+		if (indexLibre > -1){
+			idPsj = Passenger_ObtenerIdUnico();
+
+			int pideNameOK = getPedirStringSoloLetras("Ingrese nombre(s) pasajero: ", 5, "Ingreso inválido, reintente", namePsj, LEN_LNAME);
+			int pideApelOK = getPedirStringSoloLetras("Ingrese apellido(s) pasajero: ", 5, "Ingreso inválido, reintente", lNamePsj, LEN_LNAME);
+
+			getPedirString("Ingrese codigo de vuelo: ", 5, "Ingreso inválido, reintente", flyCode, LEN_FLYCODE);
+
+			int pidePriceOK = getFloatFromS("Ingrese precio de vuelo: $", 5, "Ingreso invalido, reintente: ",&price, LEN_PRICE);
+			int tipoPasajero;
+			int pideTipoPsj = getPedirInt("Ingrese tipo pasajero \n\t3: VIP | 2: BUSINESS | 1: LOW COST | 0: TRIPULACION\n",
+							5, 0, 3, "Opcion Invalida, ingrese nuevamente: \n", &tipoPasajero);
+
+
+			int psjAddOk = addPassenger( passengerList, tam, idPsj, namePsj, lNamePsj, price, tipoPasajero, flyCode);
+		}else{
+			//no hay lugar en el vector para meter mas pasajeros
+			rtn = 0;
+			printf("\n Error \n");
+		}
+
+//		}
+	}
+	return 0;
+}
+
+
+
+
+
+int Passenger_Modificacion(Passenger passengerList[], int tam){
+//	INT
+	int idPsjBucado;
+	int indexPsjBuscado;
+	int confirmaModificacion = 0;
+
+	int buscaOK = getInt("Ingrese ID de pasajero: ", &idPsjBucado,LEN_ID_PSJ);
+	printf("** Buscando pasajero %d**", idPsjBucado);
+	indexPsjBuscado = findPassengerById(passengerList,tam,idPsjBucado);
+//	printf("\nIndex -> %d",indexPsjBuscado);
+	if (indexPsjBuscado >= 0){
+		printf("\n** PASAJERO A MODIFICAR **\n");
+		printPassengerU(passengerList[indexPsjBuscado]);
+		getPedirInt("Confirma Modificacion de Pasajero\n\t1: CONFIRMA | 0: CANCELA\n\t\t", 1, 0, 1, "Error, reingrese", &confirmaModificacion);
+
+		if (confirmaModificacion == 1){
+			modifyPassenger(passengerList, indexPsjBuscado);
+		}
+
+	}
+	fflush(stdin);
+
+	return 0;
+}
+
+
+int Passenger_Baja(Passenger passengerList[], int tam){
+	int rtn = -1;
+
+
+	int idPsjBucado;
+	int indexPsjBuscado;
+	int confirmaModificacion = 0;
+
+	int buscaOK = getInt("Ingrese ID de pasajero: ", &idPsjBucado,LEN_ID_PSJ);
+	printf("** Buscando pasajero %d**", idPsjBucado);
+	indexPsjBuscado = findPassengerById(passengerList,tam,idPsjBucado);
+//	printf("\nIndex -> %d",indexPsjBuscado);
+	if (indexPsjBuscado >= 0){
+		printf("\n** PASAJERO ENCONTRADO **\n");
+		printPassengerU(passengerList[indexPsjBuscado]);
+		getPedirInt("Confirma baja de Pasajero\n\t1: CONFIRMA | 0: CANCELA\n\t\t", 1, 0, 1, "Error, reingrese", &confirmaModificacion);
+
+		if (confirmaModificacion == 1){
+			if ( removePassenger(passengerList,tam, idPsjBucado) >= 0) {
+				printf("\n** Pasajero %d borrado OK **\n",idPsjBucado);
+				rtn = 0;
+			}
+			else {
+				printf("El pasajero con ID ingresado (%d) no fue encontrado\n",idPsjBucado);
+			}
+		}
+	}
+	fflush(stdin);
+
+	return rtn;
+}
+
+
 
